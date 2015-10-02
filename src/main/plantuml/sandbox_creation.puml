@@ -1,0 +1,15 @@
+@startuml
+User -> SandboxService: POST /sandboxes
+User <-- SandboxService: 302 location=uaa/login
+User -> uaa: ....
+User <-- uaa: 302: POST: SandboxService/sandboxes?code=rezrze
+User -> SandboxService : POST /sandboxes?code=rezrze
+SandboxService -> uaa : GET /oauth/token?code=rezrze
+SandboxService <-- uaa : {user_token}
+SandboxService -> CC_api: login (as user)
+SandboxService -> CC_api: CreateSpace (as Admin)
+SandboxService -> CC_api: AssignManagerRole("org_name","space_name","user_id") (as Admin)
+SandboxService -> CC_api: AssignAuditorRole("org_name","space_name","user_id") (as Admin)
+SandboxService -> CC_api: AssignDeveloperRole("org_name","space_name","user_id") (as Admin)
+
+@enduml

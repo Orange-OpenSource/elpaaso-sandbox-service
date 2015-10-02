@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  title: Sandbox API
+  description: Onboard to Cloudfounry with the Sandbox API
+  version: 0.0.1
+host: xxx.fr
+schemes:
+  - https
+  - http
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /sandboxes:
+      post:
+        summary: Create a private sandbox
+        description: Create a private sandox using user name as sapce name. User name is extracted form JWT Oauth2 token passed in http header.
+        tags:
+          - Sandbox
+        responses:
+          '201':
+            description: private sandbox created
+            schema:
+              $ref: '#/definitions/Sandbox'
+          default:
+            description: Unexpected error
+            schema:
+              $ref: '#/definitions/Error'
+definitions:
+  Sandbox:
+    type: object
+    properties:
+      org_name:
+        type: string
+        description: Cloudfoundry Organization name where space has been created
+      space_name:
+        type: string
+        description: Cloudfoundry Space name
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
