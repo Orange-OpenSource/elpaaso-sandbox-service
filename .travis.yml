@@ -3,4 +3,4 @@ sudo: required
 services:
   - docker
 script:
-  - docker run -it -v $(pwd):/root/sources -w /root/sources maven:3.3.3-jdk-8 mvn install -e
+  - docker run -it -v $(pwd):/root/sources -w /root/sources maven:3.3.3-jdk-8 mvn clean install
