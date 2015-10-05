@@ -19,12 +19,26 @@ package com.orange.clara.cloud.services.sandbox.domain;
  */
 public class SandboxInfo {
 
-    String orgName;
-    String spaceName;
+    private String orgName;
+    private String spaceName;
+    private String userId;
 
-    public SandboxInfo(String orgName, String spaceName) {
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setSpaceName(String spaceName) {
+        this.spaceName = spaceName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public SandboxInfo(String orgName, String spaceName, String userId) {
         this.orgName = orgName;
         this.spaceName = spaceName;
+        this.userId = userId;
     }
 
     public String getOrgName() {
@@ -33,5 +47,9 @@ public class SandboxInfo {
 
     public String getSpaceName() {
         return spaceName;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

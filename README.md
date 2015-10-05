@@ -20,7 +20,7 @@
  * Suspended until further spec refinements
     * as a paas-user, once registering with pwm, I can go to the sandbox service.
     * as a paas-user, once logged into the sandbox service, I can paste the Cf login CLI commands display in the homepage
-    * as a paas-user, once logged into the sandbox service, I am notified by email of my private space credentials
+    * as a paas-user, once logged into the sandbox service, I am notified by userId of my private space credentials
 
 
 ##Tech specs of the sandbox service 

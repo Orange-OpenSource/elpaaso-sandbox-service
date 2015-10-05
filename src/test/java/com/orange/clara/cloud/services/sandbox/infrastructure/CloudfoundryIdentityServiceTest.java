@@ -12,10 +12,11 @@
  *
  */
 
-package com.orange.clara.cloud.services.sandbox.domain;
+package com.orange.clara.cloud.services.sandbox.infrastructure;
 
-import com.orange.clara.cloud.services.sandbox.infrastructure.CloudfoundryPrivateSandboxService;
+import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.lib.domain.CloudInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,28 +24,31 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.junit.Assert.*;
+
 /**
- * Created by sbortolussi on 02/10/2015.
+ * Created by sbortolussi on 05/10/2015.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CloudfoundryPrivateSandboxServiceTest {
+public class CloudfoundryIdentityServiceTest {
 
     @Mock
     CloudFoundryClient cloudFoundryClient;
 
+    @Mock
+    CloudInfo cloudInfo;
+
     @InjectMocks
-    private CloudfoundryPrivateSandboxService privateSandboxService;
+    private CloudfoundryIdentityService identityService;
 
     @Test
-    public void should_create_a_cloudfoundry_space() throws Exception {
-        final String orgName = "orange";
-        final String userName = "mycuid";
-        privateSandboxService.create(new SandboxInfo(orgName, userName));
-        Mockito.verify(cloudFoundryClient).createSpace(userName);
-        Mockito.verify(cloudFoundryClient).associateAuditorWithSpace(userName);
-        Mockito.verify(cloudFoundryClient).associateDeveloperWithSpace(userName);
-        Mockito.verify(cloudFoundryClient).associateAuditorWithSpace(userName);
+    public void should_get_user_id() throws Exception {
+
+        Mockito.when(cloudFoundryClient.getCloudInfo()).thenReturn(cloudInfo);
+
+        identityService.getUserId();
+
+        Mockito.verify(cloudFoundryClient.getCloudInfo().getUser());
+
     }
-
-
 }

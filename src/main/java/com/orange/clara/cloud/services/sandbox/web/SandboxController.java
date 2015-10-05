@@ -43,7 +43,7 @@ public class SandboxController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public void register(Principal principal) {
-        privateSandboxService.create(new SandboxInfo("orange", principal.getName()));
+        privateSandboxService.create(new SandboxInfo("orange", principal.getName(), "userId"));
     }
 
 
