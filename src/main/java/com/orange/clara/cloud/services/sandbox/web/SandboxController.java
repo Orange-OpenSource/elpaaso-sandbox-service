@@ -14,8 +14,11 @@
 
 package com.orange.clara.cloud.services.sandbox.web;
 
+import com.orange.clara.cloud.services.sandbox.application.SandboxService;
+import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
+import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +35,12 @@ import java.security.Principal;
 @RequestMapping("/v1/sandboxes")
 public class SandboxController {
 
+    SandboxService sandboxService;
+
     @Autowired
-    PrivateSandboxService privateSandboxService;
+    public SandboxController(SandboxService privateSandboxService) {
+        this.sandboxService = privateSandboxService;
+    }
 
     private static Logger LOGGER = LoggerFactory.getLogger(SandboxController.class);
 
@@ -42,8 +49,8 @@ public class SandboxController {
      * *
      */
     @RequestMapping(method = RequestMethod.POST)
-    public void register(Principal principal) {
-        privateSandboxService.create(new SandboxInfo("orange", principal.getName(), "userId"));
+    public SandboxInfo register(Principal principal) {
+        return sandboxService.createSandbox(principal);
     }
 
 

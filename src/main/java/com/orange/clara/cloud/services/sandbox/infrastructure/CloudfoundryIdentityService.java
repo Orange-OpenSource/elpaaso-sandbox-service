@@ -15,43 +15,40 @@
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
 import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
+import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.SessionScope;
+
+import java.security.Principal;
 
 /**
  * Created by sbortolussi on 05/10/2015.
  */
+@Component
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CloudfoundryIdentityService implements IdentityService {
 
     @Autowired
-    private CloudfoundryTarget cloudfoundryTarget;
-
-    public CloudfoundryIdentityService(CloudFoundryClient cloudFoundryClient) {
+    public CloudfoundryIdentityService(@Qualifier("cloudFoundryClientAsUser")CloudFoundryClient cloudFoundryClient) {
         this.cloudFoundryClient = cloudFoundryClient;
     }
 
-    private CloudFoundryClient cloudFoundryClient = null;
-
-    private OAuth2Authentication auth2Authentication;
-
-    private CloudFoundryClient getCloudFoundryClient() {
-        if (this.cloudFoundryClient == null) {
-            auth2Authentication = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
-            final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth2Authentication.getDetails();
-            DefaultOAuth2AccessToken defaultOAuth2AccessToken = new DefaultOAuth2AccessToken(details.getTokenValue());
-            CloudCredentials credentials = new CloudCredentials(defaultOAuth2AccessToken, false);
-            this.cloudFoundryClient = new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.isTrustSelfSignedCerts());
-        }
-        return this.cloudFoundryClient;
-    }
+    private CloudFoundryClient cloudFoundryClient;
 
     @Override
-    public String getUserId() {
-        return getCloudFoundryClient().getCloudInfo().getUser();
+    public UserInfo getInfo(Principal userPrincipal) {
+        UserInfo userInfo = new UserInfo(userPrincipal.getName(),cloudFoundryClient.getCloudInfo().getUser());
+
+        return userInfo;
     }
 }

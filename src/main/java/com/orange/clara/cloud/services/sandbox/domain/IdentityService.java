@@ -14,11 +14,13 @@
 
 package com.orange.clara.cloud.services.sandbox.domain;
 
+import java.security.Principal;
+
 /**
  * Created by sbortolussi on 14/09/2015.
  */
 public interface IdentityService {
 
-    String getUserId();
+    UserInfo getInfo(Principal userPrincipal);
 
 }

@@ -15,14 +15,23 @@
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
 import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
+import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.domain.CloudInfo;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+
+import java.security.Principal;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -43,12 +52,19 @@ public class CloudfoundryIdentityServiceTest {
 
     @Test
     public void should_get_user_id() throws Exception {
-
+        CloudInfo cloudInfo = new CloudInfo(Collections.unmodifiableMap(Stream.of(new AbstractMap.SimpleEntry<>("user", "user-id")).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))));
         Mockito.when(cloudFoundryClient.getCloudInfo()).thenReturn(cloudInfo);
 
-        identityService.getUserId();
+        Principal user=new Principal() {
+            @Override
+            public String getName() {
+                return "myUsername";
+            }
+        };
 
-        Mockito.verify(cloudFoundryClient.getCloudInfo().getUser());
-
+        UserInfo userInfo = identityService.getInfo(user);
+        Assertions.assertThat(userInfo).isEqualTo(new UserInfo("myUsername","user-id"));
     }
+
+
 }

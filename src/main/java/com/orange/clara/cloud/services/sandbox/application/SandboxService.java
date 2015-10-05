@@ -14,8 +14,37 @@
 
 package com.orange.clara.cloud.services.sandbox.application;
 
+import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
+import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
+import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
+import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+
 /**
  * Created by sbortolussi on 05/10/2015.
  */
+@Service
 public class SandboxService {
+
+    private IdentityService identityService;
+
+    private PrivateSandboxService privateSandboxService;
+
+    @Autowired
+    public SandboxService(IdentityService myIdentityService, PrivateSandboxService myPrivateSandboxService) {
+        this.identityService=myIdentityService;
+        this.privateSandboxService=myPrivateSandboxService;
+    }
+
+    public SandboxInfo createSandbox(Principal principal){
+
+        UserInfo userInfo = identityService.getInfo(principal);
+
+        return privateSandboxService.createSandboxForUser(userInfo);
+
+    }
+
 }

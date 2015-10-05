@@ -5,7 +5,7 @@
 
 ## Sandbox service stories
 
-###stories:
+### stories:
   * Validated 
     * as a paas-user, once logged in, I can use a private CF space (CF CLI credentials displayed in the UI)
     TBC UI 
@@ -23,7 +23,10 @@
     * as a paas-user, once logged into the sandbox service, I am notified by userId of my private space credentials
 
 
-##Tech specs of the sandbox service 
+## Tech specs of the sandbox service
+
+### Overview
+
 ![Sandbox service](http://g.gravizo.com/g?
 @startuml
 User -> SandboxService: POST /sandboxes
@@ -76,3 +79,22 @@ Inspirations for API REST
   *  SCIM ? http://www.simplecloud.info/
 
 **Note:** If wanna use angularjs (or javascript in general) don't forget to manage CORS on UAA and API
+
+# Build
+
+# Install
+
+# Running
+## Pre-requisites
+ * Cloudfoundry use, used to create space and to assign role requires at least Org Admin privilege,
+ * Org should exist. Creates a new one if required:
+    * `cf org-users sandboxes`
+ * A default space should exist,
+
+
+## Running Tests
+
+### Unit Tests
+   * `mvn clean install`
+### Integration Tests
+   * `mvn clean install -PrunITs`
