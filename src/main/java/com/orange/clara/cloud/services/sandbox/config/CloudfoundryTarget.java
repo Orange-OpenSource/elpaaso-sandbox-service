@@ -12,7 +12,7 @@
  *
  */
 
-package com.orange.clara.cloud.services.sandbox.infrastructure;
+package com.orange.clara.cloud.services.sandbox.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

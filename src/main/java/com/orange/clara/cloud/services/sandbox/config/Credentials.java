@@ -12,16 +12,16 @@
  *
  */
 
-package com.orange.clara.cloud.services.sandbox.infrastructure;
+package com.orange.clara.cloud.services.sandbox.config;
 
 /**
  * Created by sbortolussi on 05/10/2015.
  */
 public class Credentials {
 
-    protected String userId;
+    private String userId;
 
-    protected String password;
+    private String password;
 
     public String getUserId() {
         return userId;

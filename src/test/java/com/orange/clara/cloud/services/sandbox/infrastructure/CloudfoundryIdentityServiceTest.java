@@ -14,7 +14,6 @@
 
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
-import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.domain.CloudInfo;
@@ -25,7 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 
 import java.security.Principal;
 import java.util.AbstractMap;
@@ -33,29 +33,30 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by sbortolussi on 05/10/2015.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CloudfoundryIdentityServiceTest {
 
+    //access token containing "user_id: uaa-id-314"
+    public static final String ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidWFhLWlkLTMxNCIsImVtYWlsIjoiZW1haWwtMjA3QHNvbWVkb21haW4uY29tIiwic2NvcGUiOlsiY2xvdWRfY29udHJvbGxlci5hZG1pbiJdLCJhdWQiOlsiY2xvdWRfY29udHJvbGxlciJdLCJleHAiOjE0NDQyNjA2NTF9.UKdlvpim-D0p5bzKPeAHdpWOHJthtrfQpQAZzDtBO7o";
     @Mock
     CloudFoundryClient cloudFoundryClient;
 
     @Mock
-    CloudInfo cloudInfo;
+    OAuth2ClientContext oauth2Context;
 
     @InjectMocks
     private CloudfoundryIdentityService identityService;
 
     @Test
     public void should_get_user_id() throws Exception {
-        CloudInfo cloudInfo = new CloudInfo(Collections.unmodifiableMap(Stream.of(new AbstractMap.SimpleEntry<>("user", "user-id")).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))));
+        CloudInfo cloudInfo = new CloudInfo(Collections.unmodifiableMap(Stream.of(new AbstractMap.SimpleEntry<>("user", "myUsername")).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))));
         Mockito.when(cloudFoundryClient.getCloudInfo()).thenReturn(cloudInfo);
+        Mockito.when(oauth2Context.getAccessToken()).thenReturn(new DefaultOAuth2AccessToken(ACCESS_TOKEN));
 
-        Principal user=new Principal() {
+        Principal user = new Principal() {
             @Override
             public String getName() {
                 return "myUsername";
@@ -63,7 +64,7 @@ public class CloudfoundryIdentityServiceTest {
         };
 
         UserInfo userInfo = identityService.getInfo(user);
-        Assertions.assertThat(userInfo).isEqualTo(new UserInfo("myUsername","user-id"));
+        Assertions.assertThat(userInfo).isEqualTo(new UserInfo("myUsername", "uaa-id-314"));
     }
 
 

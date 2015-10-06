@@ -12,18 +12,18 @@
  *
  */
 
-package com.orange.clara.cloud.services.sandbox.infrastructure;
+package com.orange.clara.cloud.services.sandbox.config;
 
 /**
  * Created by sbortolussi on 05/10/2015.
  */
 public class ProxyInfo {
 
-    protected boolean enabled=Boolean.FALSE;
+    private boolean enabled=Boolean.FALSE;
 
-    protected String host;
+    private String host;
 
-    protected int port;
+    private int port;
 
     public String getHost() {
         return host;

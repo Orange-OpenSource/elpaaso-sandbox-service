@@ -14,7 +14,7 @@
 
 package com.orange.clara.cloud.services.sandbox;
 
-import com.orange.clara.cloud.services.sandbox.infrastructure.CloudfoundryTarget;
+import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +30,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.web.csrf.CsrfFilter;
 
 @SpringBootApplication(exclude = {OAuth2LoadBalancerClientAutoConfiguration.class})
 @EnableOAuth2Sso

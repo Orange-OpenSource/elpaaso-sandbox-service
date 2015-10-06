@@ -40,11 +40,8 @@ public class SandboxService {
     }
 
     public SandboxInfo createSandbox(Principal principal){
-
         UserInfo userInfo = identityService.getInfo(principal);
-
         return privateSandboxService.createSandboxForUser(userInfo);
-
     }
 
 }

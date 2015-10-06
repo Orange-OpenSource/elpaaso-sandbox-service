@@ -14,6 +14,7 @@
 
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
+import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
@@ -40,21 +41,13 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
     }
 
 
-    private CloudFoundryClient getCloudFoundryClient() {
-        if (this.cloudFoundryClient == null) {
-            CloudCredentials credentials = new CloudCredentials(cloudfoundryTarget.getCredentials().getUserId(), cloudfoundryTarget.getCredentials().getPassword());
-            this.cloudFoundryClient = new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(),cloudfoundryTarget.getOrg(),cloudfoundryTarget.getSpace(), cloudfoundryTarget.isTrustSelfSignedCerts());
-        }
-        return this.cloudFoundryClient;
-    }
-
     @Override
     public SandboxInfo createSandboxForUser(UserInfo userInfo) {
         SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(),userInfo.getUsername());
-        getCloudFoundryClient().createSpace(sandboxInfo.getSpaceName());
-        getCloudFoundryClient().associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
-        getCloudFoundryClient().associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
-        getCloudFoundryClient().associateDeveloperWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        cloudFoundryClient.createSpace(sandboxInfo.getSpaceName());
+        cloudFoundryClient.associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        cloudFoundryClient.associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        cloudFoundryClient.associateDeveloperWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
     return sandboxInfo;
 
     }

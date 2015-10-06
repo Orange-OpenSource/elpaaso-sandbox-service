@@ -14,6 +14,7 @@
 
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
+import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
