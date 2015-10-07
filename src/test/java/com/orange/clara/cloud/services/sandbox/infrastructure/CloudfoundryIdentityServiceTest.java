@@ -26,12 +26,16 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.security.Principal;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.mockito.Mockito.when;
 
 /**
  * Created by sbortolussi on 05/10/2015.
@@ -47,21 +51,18 @@ public class CloudfoundryIdentityServiceTest {
     @Mock
     OAuth2ClientContext oauth2Context;
 
+    @Mock
+    OAuth2AccessToken oAuth2AccessToken;
+
     @InjectMocks
     private CloudfoundryIdentityService identityService;
 
     @Test
     public void should_get_user_id() throws Exception {
-        CloudInfo cloudInfo = new CloudInfo(Collections.unmodifiableMap(Stream.of(new AbstractMap.SimpleEntry<>("user", "myUsername")).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))));
-        Mockito.when(cloudFoundryClient.getCloudInfo()).thenReturn(cloudInfo);
-        Mockito.when(oauth2Context.getAccessToken()).thenReturn(new DefaultOAuth2AccessToken(ACCESS_TOKEN));
+        when(oAuth2AccessToken.getValue()).thenReturn(ACCESS_TOKEN);
+        identityService.setoAuth2AccessToken(oAuth2AccessToken);
 
-        Principal user = new Principal() {
-            @Override
-            public String getName() {
-                return "myUsername";
-            }
-        };
+        Principal user = () -> "myUsername";
 
         UserInfo userInfo = identityService.getInfo(user);
         Assertions.assertThat(userInfo).isEqualTo(new UserInfo("myUsername", "uaa-id-314"));
