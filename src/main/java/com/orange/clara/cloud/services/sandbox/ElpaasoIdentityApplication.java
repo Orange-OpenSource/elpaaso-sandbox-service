@@ -30,13 +30,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 @SpringBootApplication(exclude = {OAuth2LoadBalancerClientAutoConfiguration.class})
 @EnableOAuth2Sso
 //@EnableResourceServer
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class ElpaasoIdentityApplication  extends WebSecurityConfigurerAdapter {
 
     public static void main(String[] args) {
@@ -47,13 +48,19 @@ public class ElpaasoIdentityApplication  extends WebSecurityConfigurerAdapter {
     private CloudfoundryTarget cloudfoundryTarget;
 
 
+    @Bean
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public OAuth2AccessToken getOAuth2AccessToken(){
+        OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) oAuth2Authentication.getDetails();
+        return new DefaultOAuth2AccessToken(details.getTokenValue());
+
+    }
+
     @Bean(name = "cloudFoundryClientAsUser")
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public CloudFoundryClient getCloudFoundryClientAsUser() {
-        OAuth2Authentication auth2Authentication = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
-        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth2Authentication.getDetails();
-        DefaultOAuth2AccessToken defaultOAuth2AccessToken = new DefaultOAuth2AccessToken(details.getTokenValue());
-        CloudCredentials credentials = new CloudCredentials(defaultOAuth2AccessToken, false);
+        CloudCredentials credentials = new CloudCredentials(getOAuth2AccessToken(), false);
         return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.isTrustSelfSignedCerts());
     }
 

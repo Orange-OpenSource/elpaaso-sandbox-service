@@ -31,6 +31,16 @@ public class CloudfoundryTarget {
     private Credentials credentials;
     private boolean trustSelfSignedCerts;
     private String org;
+    private String defaultSpace;
+
+    public String getDefaultSpace() {
+        return defaultSpace;
+    }
+
+    public CloudfoundryTarget setDefaultSpace(String defaultSpace) {
+        this.defaultSpace = defaultSpace;
+        return this;
+    }
 
     private String space;
 
