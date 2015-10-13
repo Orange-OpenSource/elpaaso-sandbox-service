@@ -56,6 +56,7 @@ public class CloudfoundryPrivateSandboxServiceTest {
         when(cloudfoundryTarget.getApiUrl()).thenReturn(apiUrl);
 
         SandboxInfo sandboxForUser = privateSandboxService.createSandboxForUser(new UserInfo(userName, userId));
+        Mockito.verify(cloudFoundryClient).associateUserWithOrg(orgName,userName);
         Mockito.verify(cloudFoundryClient).createSpace(userName);
         Mockito.verify(cloudFoundryClient).associateAuditorWithSpace(orgName, userName,userId);
         Mockito.verify(cloudFoundryClient).associateDeveloperWithSpace(orgName, userName,userId);

@@ -21,7 +21,6 @@
         </server>
     </servers>
 
-
     <profiles>
         <profile>
             <id>requires-spring-snapshots</id>
@@ -85,9 +84,34 @@
                 </pluginRepository>
             </pluginRepositories>
         </profile>
-
+        <profile>
+            <id>enable-jcenter</id>
+            <repositories>
+                <repository>
+                    <id>jcenter</id>
+                    <name>JCenter-Bintray</name>
+                    <url>http://jcenter.bintray.com</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>jcenter</id>
+                    <name>JCenter-Bintray</name>
+                    <url>http://jcenter.bintray.com</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
     </profiles>
 
-    <activeProfiles><activeProfile>requires-spring-milestones</activeProfile></activeProfiles>
+    <activeProfiles>
+        <activeProfile>requires-spring-milestones</activeProfile>
+        <activeProfile>enabled-jcenter</activeProfile>
+    </activeProfiles>
 
 </settings>

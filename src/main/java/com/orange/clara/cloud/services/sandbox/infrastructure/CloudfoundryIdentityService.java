@@ -14,7 +14,6 @@
 
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
@@ -30,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sbortolussi on 05/10/2015.
@@ -53,23 +52,24 @@ public class CloudfoundryIdentityService implements IdentityService {
         return this;
     }
 
-
     @Override
     public UserInfo getInfo(Principal userPrincipal) {
-
         createUserInCloudfoundry();
+        String username = userPrincipal.getName();
+        String userGuid = getUserGuidFromAccessToken(username);
+        return new UserInfo(username, userGuid);
+    }
 
-        Jwt jwt=JwtHelper.decode(oAuth2AccessToken.getValue());
-        HashMap<String,Object> map;
+    private String getUserGuidFromAccessToken(String username) {
+        Jwt jwt= JwtHelper.decode(oAuth2AccessToken.getValue());
+        Map map;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            map=mapper.readValue(jwt.getClaims(), new TypeReference<HashMap<String,Object>>(){});
-            UserInfo userInfo = new UserInfo(userPrincipal.getName(), (String) map.get("user_id"));
-            return userInfo;
+            map=mapper.readValue(jwt.getClaims(), Map.class);
         } catch (IOException e) {
-            throw  new RuntimeException("Cannot parse jwt token for user " +userPrincipal.getName(),e);
+            throw  new RuntimeException("Cannot parse jwt token for user " + username,e);
         }
-
+        return (String) map.get("user_id");
     }
 
     private void createUserInCloudfoundry() {

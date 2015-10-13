@@ -34,20 +34,19 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
     private CloudFoundryClient cloudFoundryClient;
 
     @Autowired
-    public CloudfoundryPrivateSandboxService(CloudfoundryTarget cloudfoundryTarget,@Qualifier("cloudFoundryClientAsAdmin") CloudFoundryClient cloudFoundryClient) {
+    public CloudfoundryPrivateSandboxService(CloudfoundryTarget cloudfoundryTarget, @Qualifier("cloudFoundryClientAsAdmin") CloudFoundryClient cloudFoundryClient) {
         this.cloudfoundryTarget = cloudfoundryTarget;
         this.cloudFoundryClient = cloudFoundryClient;
     }
 
-
     @Override
     public SandboxInfo createSandboxForUser(UserInfo userInfo) {
         SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(),userInfo.getUsername(), cloudfoundryTarget.getApiUrl());
+        cloudFoundryClient.associateUserWithOrg(cloudfoundryTarget.getOrg(), userInfo.getUsername());
         cloudFoundryClient.createSpace(sandboxInfo.getSpaceName());
         cloudFoundryClient.associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
         cloudFoundryClient.associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
         cloudFoundryClient.associateDeveloperWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
-    return sandboxInfo;
-
+        return sandboxInfo;
     }
 }
