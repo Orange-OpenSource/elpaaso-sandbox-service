@@ -29,7 +29,7 @@ import java.security.Principal;
  * Created by sbortolussi on 14/09/2015.
  */
 @RestController
-@RequestMapping("/v1/sandboxes")
+@RequestMapping("/v1/sandboxes/me")
 public class SandboxController {
 
     SandboxService sandboxService;
@@ -45,7 +45,7 @@ public class SandboxController {
      * register into cloud controller
      * *
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.GET)
     public SandboxInfo register(Principal principal) {
         return sandboxService.createSandbox(principal);
     }

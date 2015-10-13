@@ -26,6 +26,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.net.URL;
+
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
@@ -49,7 +51,9 @@ public class CloudfoundryPrivateSandboxServiceTest {
         final String orgName = "orange";
         final String userName = "mycuid";
         final String userId = "user-id";
+        final URL apiUrl = new URL("http://localhost");
         when(cloudfoundryTarget.getOrg()).thenReturn(orgName);
+        when(cloudfoundryTarget.getApiUrl()).thenReturn(apiUrl);
 
         SandboxInfo sandboxForUser = privateSandboxService.createSandboxForUser(new UserInfo(userName, userId));
         Mockito.verify(cloudFoundryClient).createSpace(userName);
@@ -57,7 +61,7 @@ public class CloudfoundryPrivateSandboxServiceTest {
         Mockito.verify(cloudFoundryClient).associateDeveloperWithSpace(orgName, userName,userId);
         Mockito.verify(cloudFoundryClient).associateAuditorWithSpace(orgName, userName,userId);
 
-        Assertions.assertThat(sandboxForUser).isEqualTo(new SandboxInfo(orgName,userName));
+        Assertions.assertThat(sandboxForUser).isEqualTo(new SandboxInfo(orgName,userName, apiUrl));
 
 
     }

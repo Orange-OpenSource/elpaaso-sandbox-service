@@ -17,6 +17,8 @@ package com.orange.clara.cloud.services.sandbox.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.net.URL;
+
 /**
  * Created by sbortolussi on 02/10/2015.
  */
@@ -25,9 +27,12 @@ public class SandboxInfo {
     private String orgName;
     private String spaceName;
 
-    public SandboxInfo(String orgName, String spaceName) {
+    private URL apiUrl;
+
+    public SandboxInfo(String orgName, String spaceName, URL apiUrl) {
         this.orgName = orgName;
         this.spaceName = spaceName;
+        this.apiUrl = apiUrl;
     }
 
     public String getOrgName() {
@@ -36,6 +41,10 @@ public class SandboxInfo {
 
     public String getSpaceName() {
         return spaceName;
+    }
+
+    public URL getApiUrl() {
+        return apiUrl;
     }
 
     @Override
@@ -49,6 +58,7 @@ public class SandboxInfo {
         return new EqualsBuilder()
                 .append(orgName, that.orgName)
                 .append(spaceName, that.spaceName)
+                .append(apiUrl, that.apiUrl)
                 .isEquals();
     }
 
@@ -57,6 +67,7 @@ public class SandboxInfo {
         return new HashCodeBuilder(17, 37)
                 .append(orgName)
                 .append(spaceName)
+                .append(apiUrl)
                 .toHashCode();
     }
 }

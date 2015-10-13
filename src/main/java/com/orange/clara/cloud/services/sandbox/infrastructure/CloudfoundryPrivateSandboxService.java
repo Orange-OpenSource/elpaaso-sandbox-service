@@ -18,7 +18,6 @@ import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
-import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,7 +42,7 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
 
     @Override
     public SandboxInfo createSandboxForUser(UserInfo userInfo) {
-        SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(),userInfo.getUsername());
+        SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(),userInfo.getUsername(), cloudfoundryTarget.getApiUrl());
         cloudFoundryClient.createSpace(sandboxInfo.getSpaceName());
         cloudFoundryClient.associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
         cloudFoundryClient.associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());

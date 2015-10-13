@@ -20,7 +20,6 @@ import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.security.oauth2.client.OAuth2LoadBalancerClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
@@ -31,26 +30,25 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 @SpringBootApplication(exclude = {OAuth2LoadBalancerClientAutoConfiguration.class})
-@EnableOAuth2Sso
-//@EnableResourceServer
+@EnableResourceServer
 @EnableWebSecurity(debug = false)
-public class ElpaasoIdentityApplication  extends WebSecurityConfigurerAdapter {
+public class ElpaasoSandboxServiceApplication extends WebSecurityConfigurerAdapter {
 
     public static void main(String[] args) {
-        SpringApplication.run(ElpaasoIdentityApplication.class, args);
+        SpringApplication.run(ElpaasoSandboxServiceApplication.class, args);
     }
 
     @Autowired
     private CloudfoundryTarget cloudfoundryTarget;
 
-
     @Bean
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public OAuth2AccessToken getOAuth2AccessToken(){
+    public OAuth2AccessToken getOAuth2AccessToken() {
         OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) oAuth2Authentication.getDetails();
         return new DefaultOAuth2AccessToken(details.getTokenValue());
@@ -68,9 +66,8 @@ public class ElpaasoIdentityApplication  extends WebSecurityConfigurerAdapter {
     @Bean(name = "cloudFoundryClientAsAdmin")
     public CloudFoundryClient getCloudFoundryClientAsAdmin() {
         CloudCredentials credentials = new CloudCredentials(cloudfoundryTarget.getCredentials().getUserId(), cloudfoundryTarget.getCredentials().getPassword());
-        return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(),cloudfoundryTarget.getOrg(),cloudfoundryTarget.getSpace(), cloudfoundryTarget.isTrustSelfSignedCerts());
+        return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.getOrg(), cloudfoundryTarget.getSpace(), cloudfoundryTarget.isTrustSelfSignedCerts());
     }
-
 
 
     @Override
