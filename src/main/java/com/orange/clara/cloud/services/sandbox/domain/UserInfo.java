@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2015 Orange
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,42 +9,32 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 package com.orange.clara.cloud.services.sandbox.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.net.URL;
-
 /**
- * Created by sbortolussi on 02/10/2015.
+ * Created by O. Orand on 05/10/2015.
  */
-public class SandboxInfo {
+public class UserInfo {
 
-    private String orgName;
-    private String spaceName;
+    private String username;
+    private  String userId;
 
-    private URL apiUrl;
-
-    public SandboxInfo(String orgName, String spaceName, URL apiUrl) {
-        this.orgName = orgName;
-        this.spaceName = spaceName;
-        this.apiUrl = apiUrl;
+    public UserInfo(String name, String userId) {
+        this.userId=userId;
+        this.username=name;
     }
 
-    public String getOrgName() {
-        return orgName;
+
+    public String getUsername() {
+        return username;
     }
 
-    public String getSpaceName() {
-        return spaceName;
-    }
-
-    public URL getApiUrl() {
-        return apiUrl;
+    public String getUserId() {
+        return userId;
     }
 
     @Override
@@ -53,21 +43,19 @@ public class SandboxInfo {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        SandboxInfo that = (SandboxInfo) o;
+        UserInfo userInfo = (UserInfo) o;
 
         return new EqualsBuilder()
-                .append(orgName, that.orgName)
-                .append(spaceName, that.spaceName)
-                .append(apiUrl, that.apiUrl)
+                .append(username, userInfo.username)
+                .append(userId, userInfo.userId)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(orgName)
-                .append(spaceName)
-                .append(apiUrl)
+                .append(username)
+                .append(userId)
                 .toHashCode();
     }
 }

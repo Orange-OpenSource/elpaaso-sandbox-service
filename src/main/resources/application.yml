@@ -1,0 +1,11 @@
+cloudfoundry:
+  apiUrl:
+  proxyInfo:
+    enabled:
+    host:
+    port:
+  credentials:
+    userId:
+    password:
+  trustSelfSignedCerts: true
+  org: sandboxes

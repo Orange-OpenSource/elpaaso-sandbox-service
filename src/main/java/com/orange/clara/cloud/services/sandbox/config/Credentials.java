@@ -12,15 +12,30 @@
  *
  */
 
-package com.orange.clara.cloud.services.sandbox.domain;
-
-import java.security.Principal;
+package com.orange.clara.cloud.services.sandbox.config;
 
 /**
- * Created by sbortolussi on 14/09/2015.
+ * Created by sbortolussi on 05/10/2015.
  */
-public interface PrivateSandboxService {
+public class Credentials {
 
-    SandboxInfo createSandboxForUser(UserInfo userInfo);
+    private String userId;
 
+    private String password;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

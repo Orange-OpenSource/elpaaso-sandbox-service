@@ -19,8 +19,8 @@ import java.security.Principal;
 /**
  * Created by sbortolussi on 14/09/2015.
  */
-public interface PrivateSandboxService {
+public interface IdentityService {
 
-    SandboxInfo createSandboxForUser(UserInfo userInfo);
+    UserInfo getInfo(Principal userPrincipal);
 
 }

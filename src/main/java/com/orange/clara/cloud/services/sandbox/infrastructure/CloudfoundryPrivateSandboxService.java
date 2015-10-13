@@ -14,23 +14,39 @@
 
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
+import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
+import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by sbortolussi on 02/10/2015.
  */
+@Component
 public class CloudfoundryPrivateSandboxService implements PrivateSandboxService {
+
+    private CloudfoundryTarget cloudfoundryTarget;
 
     private CloudFoundryClient cloudFoundryClient;
 
-    public CloudfoundryPrivateSandboxService(CloudFoundryClient cloudFoundryClient) {
+    @Autowired
+    public CloudfoundryPrivateSandboxService(CloudfoundryTarget cloudfoundryTarget, @Qualifier("cloudFoundryClientAsAdmin") CloudFoundryClient cloudFoundryClient) {
+        this.cloudfoundryTarget = cloudfoundryTarget;
         this.cloudFoundryClient = cloudFoundryClient;
     }
 
     @Override
-    public void create(SandboxInfo sandboxInfo) {
-
+    public SandboxInfo createSandboxForUser(UserInfo userInfo) {
+        SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(),userInfo.getUsername(), cloudfoundryTarget.getApiUrl());
+        cloudFoundryClient.associateUserWithOrg(cloudfoundryTarget.getOrg(), userInfo.getUsername());
+        cloudFoundryClient.createSpace(sandboxInfo.getSpaceName());
+        cloudFoundryClient.associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        cloudFoundryClient.associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        cloudFoundryClient.associateDeveloperWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        return sandboxInfo;
     }
 }
