@@ -1,11 +1,26 @@
+logging.level.org.springframework.security: INFO
+logging.level.org.apache.http.wire: INFO
+logging.level.com.orange.clara.cloud.services.sandbox.ElpaasoSandboxServiceApplication: DEBUG
+
 cloudfoundry:
   apiUrl:
   proxyInfo:
-    enabled:
+    enabled: false
     host:
-    port:
+    port: 0
   credentials:
     userId:
     password:
   trustSelfSignedCerts: true
   org: sandboxes
+  space: default-space
+server:
+  port: 8081
+security:
+  basic.enabled: false
+  user:
+    password: user
+  oauth2:
+    resource:
+       jwt:
+          keyValue:

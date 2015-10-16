@@ -17,6 +17,8 @@ package com.orange.clara.cloud.services.sandbox;
 import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,11 +35,25 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @SpringBootApplication(exclude = {OAuth2LoadBalancerClientAutoConfiguration.class})
 @EnableResourceServer
-@EnableWebSecurity(debug = false)
-public class ElpaasoSandboxServiceApplication extends WebSecurityConfigurerAdapter {
+public class ElpaasoSandboxServiceApplication {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(ElpaasoSandboxServiceApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(ElpaasoSandboxServiceApplication.class, args);
@@ -58,23 +74,15 @@ public class ElpaasoSandboxServiceApplication extends WebSecurityConfigurerAdapt
     @Bean(name = "cloudFoundryClientAsUser")
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public CloudFoundryClient getCloudFoundryClientAsUser() {
+        LOGGER.debug("Creating new CloudFoundry client using access token");
         CloudCredentials credentials = new CloudCredentials(getOAuth2AccessToken(), false);
         return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.isTrustSelfSignedCerts());
     }
 
-
     @Bean(name = "cloudFoundryClientAsAdmin")
     public CloudFoundryClient getCloudFoundryClientAsAdmin() {
+        LOGGER.debug("Creating new ADMIN CloudFoundry client ");
         CloudCredentials credentials = new CloudCredentials(cloudfoundryTarget.getCredentials().getUserId(), cloudfoundryTarget.getCredentials().getPassword());
         return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.getOrg(), cloudfoundryTarget.getSpace(), cloudfoundryTarget.isTrustSelfSignedCerts());
     }
-
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.logout().and().antMatcher("/**").authorizeRequests()
-                .antMatchers("/index.html", "/home.html", "/", "/login").permitAll()
-                .anyRequest().authenticated().and().csrf().disable();
-    }
-
 }

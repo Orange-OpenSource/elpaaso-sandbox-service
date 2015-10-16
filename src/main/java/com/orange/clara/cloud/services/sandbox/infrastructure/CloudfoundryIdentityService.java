@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -37,6 +39,7 @@ import java.util.Map;
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CloudfoundryIdentityService implements IdentityService {
+    private static Logger LOGGER = LoggerFactory.getLogger(CloudfoundryIdentityService.class);
 
     private CloudFoundryClient cloudFoundryClient;
     private OAuth2AccessToken oAuth2AccessToken;
@@ -56,11 +59,13 @@ public class CloudfoundryIdentityService implements IdentityService {
     public UserInfo getInfo(Principal userPrincipal) {
         createUserInCloudfoundry();
         String username = userPrincipal.getName();
+        LOGGER.info("User {} has been created on cloudfoundry.",username);
         String userGuid = getUserGuidFromAccessToken(username);
         return new UserInfo(username, userGuid);
     }
 
     private String getUserGuidFromAccessToken(String username) {
+        LOGGER.debug("Decoding JWT for user {}",username);
         Jwt jwt= JwtHelper.decode(oAuth2AccessToken.getValue());
         Map map;
         try {
@@ -69,6 +74,7 @@ public class CloudfoundryIdentityService implements IdentityService {
         } catch (IOException e) {
             throw  new RuntimeException("Cannot parse jwt token for user " + username,e);
         }
+        LOGGER.debug("Getting user_id for user {}",username);
         return (String) map.get("user_id");
     }
 

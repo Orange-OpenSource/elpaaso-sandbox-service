@@ -18,6 +18,8 @@ import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,7 @@ import java.security.Principal;
  */
 @Service
 public class SandboxService {
+    private static Logger LOGGER = LoggerFactory.getLogger(SandboxService.class);
 
     private IdentityService identityService;
 
@@ -40,6 +43,7 @@ public class SandboxService {
     }
 
     public SandboxInfo createSandbox(Principal principal){
+        LOGGER.info("Create sandbox for {}",principal.getName());
         UserInfo userInfo = identityService.getInfo(principal);
         return privateSandboxService.createSandboxForUser(userInfo);
     }
