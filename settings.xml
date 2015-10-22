@@ -111,7 +111,7 @@
 
     <activeProfiles>
         <activeProfile>requires-spring-milestones</activeProfile>
-        <activeProfile>enabled-jcenter</activeProfile>
+        <activeProfile>enable-jcenter</activeProfile>
     </activeProfiles>
 
 </settings>
