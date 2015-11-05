@@ -18,7 +18,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <groupId>com.orange.clara.cloud.services.sandbox</groupId>
     <artifactId>elpaaso-sandbox-service</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -56,7 +55,6 @@
         </dependencies>
     </dependencyManagement>
 
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,7 +86,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.orange.clara.cloudfoundry.client.lib</groupId>
             <artifactId>cloudfoundry-client-lib</artifactId>
@@ -109,7 +106,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.3.2</version>
         </dependency>
-
     </dependencies>
 
     <build>
