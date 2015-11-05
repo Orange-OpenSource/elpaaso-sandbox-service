@@ -156,6 +156,10 @@
                                     <deployProperties>
                                         <githubRepo>${env.TRAVIS_REPO_SLUG}</githubRepo>
                                     </deployProperties>
+                                    <artifactory>
+                                        <envVarsIncludePatterns>*TRAVIS*</envVarsIncludePatterns>
+                                        <includeEnvVars>true</includeEnvVars>
+                                    </artifactory>
                                     <publisher>
                                         <contextUrl>https://oss.jfrog.org</contextUrl>
                                         <username>${env.BINTRAY_USER}</username>
