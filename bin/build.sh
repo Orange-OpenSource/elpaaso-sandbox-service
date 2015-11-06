@@ -17,9 +17,9 @@ set -ev
 echo "TRAVIS_BRANCH: <$TRAVIS_BRANCH> - TRAVIS_TAG: <$TRAVIS_TAG>"
 
 #Download dependencies
-mvn -q help:evaluate -Dexpression=project.version
+mvn -q help:evaluate -Dexpression=project.version --settings settings.xml
 # Capture execution of maven command - It looks like grep cannot be used like this on travis
-export VERSION_SNAPSHOT=$(mvn help:evaluate -Dexpression=project.version |grep '^[0-9].*')
+export VERSION_SNAPSHOT=$(mvn help:evaluate -Dexpression=project.version --settings settings.xml |grep '^[0-9].*')
 
 echo "Current version extracted from pom.xml: $VERSION_SNAPSHOT"
 
@@ -35,16 +35,16 @@ then
 	echo "Setting new version old: $VERSION_SNAPSHOT"
 
 	#Download dependencies
-	mvn -q versions:help
-	mvn -e versions:set -DnewVersion=${RELEASE_CANDIDATE_VERSION} -DgenerateBackupPoms=false -DallowSnapshots=true
+	mvn -q versions:help --settings settings.xml
+	mvn -e versions:set -DnewVersion=${RELEASE_CANDIDATE_VERSION} -DgenerateBackupPoms=false -DallowSnapshots=true --settings settings.xml
 
 	echo "Compiling and deploying to OSS Jfrog"
 
-	mvn -q deploy:help
+	mvn -q deploy:help --settings settings.xml
 	mvn clean deploy --settings settings.xml -P ojo-build-info
 	echo $RELEASE_CANDIDATE_VERSION > RELEASE_CANDIDATE_VERSION
 else
-	mvn -q install:help
+	mvn -q install:help --settings settings.xml
 	mvn install --settings settings.xml
 fi
 
