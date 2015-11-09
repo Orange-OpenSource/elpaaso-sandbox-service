@@ -38,24 +38,23 @@
 
 ![Sandbox service](http://g.gravizo.com/g?
 @startuml
-User -> SandboxService: GET sandboxes/me
-User <-- SandboxService: 302 location=uaa/login
-User -> uaa: ....
-User <-- uaa: 302: GET: SandboxService/sandboxes/me?code=rezrze
-User -> SandboxService : GET /sandboxes/me?code=rezrze
-SandboxService -> uaa : GET /oauth/token?code=rezrze
-SandboxService <-- uaa : user_token
-SandboxService -> CC_api: login (as user)
-SandboxService -> CC_api: getCloudInfo (as user)
-SandboxService -> CC_api: getOrg (as Admin)
-SandboxService -> CC_api: AssociateUserWithOrganization (as Admin)
-SandboxService -> CC_api: CreateSpace (as Admin)
-SandboxService -> CC_api: AssignManagerRole("org_name","space_name","user_id") (as Admin)
-SandboxService -> CC_api: AssignAuditorRole("org_name","space_name","user_id") (as Admin)
-SandboxService -> CC_api: AssignDeveloperRole("org_name","space_name","user_id") (as Admin)
-User <-- SandboxService: "org_name","space_name","cc_api_url"
-@enduml
-)
+User -> SandboxService: GET sandboxes/me;
+User <-- SandboxService: 302 location=uaa/login;
+User -> uaa: ....;
+User <-- uaa: 302: GET: SandboxService/sandboxes/me?code=rezrze;
+User -> SandboxService : GET /sandboxes/me?code=rezrze;
+SandboxService -> uaa : GET /oauth/token?code=rezrze;
+SandboxService <-- uaa : user_token;
+SandboxService -> CC_api: login (as user);
+SandboxService -> CC_api: getCloudInfo (as user);
+SandboxService -> CC_api: getOrg (as Admin);
+SandboxService -> CC_api: AssociateUserWithOrganization (as Admin);
+SandboxService -> CC_api: CreateSpace (as Admin);
+SandboxService -> CC_api: AssignManagerRole("org_name","space_name","user_id") (as Admin);
+SandboxService -> CC_api: AssignAuditorRole("org_name","space_name","user_id") (as Admin);
+SandboxService -> CC_api: AssignDeveloperRole("org_name","space_name","user_id") (as Admin);
+User <-- SandboxService: "org_name","space_name","cc_api_url";
+@enduml)
 
 
 
