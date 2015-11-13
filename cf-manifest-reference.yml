@@ -1,0 +1,33 @@
+---
+applications:
+- name: sandbox-ui
+  memory: 512M
+  instances: 2
+  host: sandbox-ui
+  env:
+    # Required SSL by default (using tomcat x-forwarded-for and x-forwarded-proto)
+    #SECURITY_REQUIRE_SSL: true
+
+    # CSRF protection is enabled by default
+    #SECURITY_ENABLE_CSRF: true
+
+    # Allow to disable SSL certificate check. SHOULD NOT BE disabled !!!
+    # ENABLE_SSL_CERTIFICATE_CHECK: false
+
+    # CloudFoundry api url
+    CLOUDFOUNDRY_API_URL:
+    # CloudFoudry user with Org admin privillege
+    CLOUDFOUNDRY_CREDENTIALS_USER_ID:
+    # CloudFoudry user password
+    CLOUDFOUNDRY_CREDENTIALS_PASSWORD:
+    # CloudFoundry org name to create sandbox spaces
+    CLOUDFOUNDRY_ORG: sandboxes
+    # CloudFoundry existing space used at connection time
+    CLOUDFOUNDRY_SPACE: default-space
+
+    # OAuth2
+    # You have to customize OAuth2 connection info - Required parameter
+    # SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE:
+
+    # scope required to allow access to sensitive endpoint
+    # SECURITY_OAUTH2_ADMIN_SCOPE:

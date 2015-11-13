@@ -29,12 +29,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 @SpringBootApplication(exclude = {OAuth2LoadBalancerClientAutoConfiguration.class})
-@EnableResourceServer
 public class ElpaasoSandboxServiceApplication {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ElpaasoSandboxServiceApplication.class);
@@ -52,7 +50,6 @@ public class ElpaasoSandboxServiceApplication {
         OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) oAuth2Authentication.getDetails();
         return new DefaultOAuth2AccessToken(details.getTokenValue());
-
     }
 
     @Bean(name = "cloudFoundryClientAsUser")
