@@ -12,21 +12,27 @@
 ## Sandbox service stories
 
 ### stories:
-  * Validated 
-    * as a paas-user, once logged in, I can use a private CF space (CF CLI credentials displayed in the UI)
-    TBC UI 
-      * To be drafted with balsamiq https://elpaaso.mybalsamiq.com/projects/opensource/grid
 
-      * Server-side
-        * ElPaaso homepage 
-        
-      * Client-side
-        * another standalone UI (e.g. JS): through an OAuth gateway 
+* MVP: as a paas-user, once logged in, I can use a private CF space: API endpoint, org and space details displayed.
+  * given: a user with a account into CF UAA
+  * when: the user browses to the sandbox service through sandbox-ui
+  * then: the user is prompted in the UAA to provide his consent from sandbox-service to act on his behalf (cloudcontroler.read, openid scopes)
+  * and: the user is displayed with CF a CLI command to connect to a private space
+     
 
- * Suspended until further spec refinements
-    * as a paas-user, once registering with pwm, I can go to the sandbox service.
-    * as a paas-user, once logged into the sandbox service, I can paste the Cf login CLI commands display in the homepage
-    * as a paas-user, once logged into the sandbox service, I am notified by userId of my private space credentials
+Pending stories:
+* paas-ops email notification:
+   * given: the paas-ops has configured an email address $email in the sandbox-service config and a cf instance name $cf_instance
+   * when: the paas-user first access the sandbox to access her private space
+   * then: a notification email is sent to the configured adress which includes: 
+      * in subject: [sandbox $cf_instance]: private space created for $user_name      
+      * in the email body: user name, user email, CC API endpoint, org & space name
+* private space templating
+   * given: the paas-ops has configured:
+      * a security group with name $sec-group-name
+      * a space quota with name $space-quota-name 
+   * when: the paas-user first access the sandbox to access her private space
+   * then: a space is allocated and bound to the specific security group $sec-group-name and the space quota $space-quota-name
 
 
 ## GUI
@@ -93,6 +99,13 @@ To be able to build this project, you have to update your maven settings. You ca
    * `mvn clean install -PrunITs`
 
 # Install
+
+Please use manifest-reference.yml as template for your CF CLI manifest file.
+
+```
+$ mvn package
+$ cf push sanbox-ui -p target/elpaaso-service-1.0-SNAPSHOT.jar -m manifest.yml
+```
 
 # Running
 ## Pre-requisites
