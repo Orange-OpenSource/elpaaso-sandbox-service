@@ -98,6 +98,12 @@ To be able to build this project, you have to update your maven settings. You ca
 ### Integration Tests
    * `mvn clean install -PrunITs`
 
+# Release
+We use [OJO](https://oss.jfrog.org). Thus we can use build promotion to release our component.
+  1.
+
+Full release process is detailed in /src/bin/release
+
 # Install
 
 Please use manifest-reference.yml as template for your CF CLI manifest file.
