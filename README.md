@@ -89,7 +89,7 @@ Inspirations for API REST
 **Note:** If wanna use angularjs (or javascript in general) don't forget to manage CORS on UAA and API
 
 # Build
-To be able to build this project, you have to update your maven settings. You can use the one provided [here]()
+To be able to build this project, you have to update your maven settings. You can use the one provided [here](/settings.xml)
 
 ## Running Tests
 
@@ -99,19 +99,70 @@ To be able to build this project, you have to update your maven settings. You ca
    * `mvn clean install -PrunITs`
 
 # Release
-We use [OJO](https://oss.jfrog.org). Thus we can use build promotion to release our component.
-  1.
+We use [OJO](https://oss.jfrog.org). Thus we can use build promotion to release our component on [Jcenter](https://jcenter.bintray.com).
 
 Full release process is detailed in /src/bin/release
 
+# Download
+According to your usage, you can use Maven [Jcenter](https://jcenter.bintray.com) or [Bintray](https://bintray.com/elpaaso/maven/elpaaso-sandbox-service/_latestVersion)
+
 # Install
 
-Please use manifest-reference.yml as template for your CF CLI manifest file.
+Please use cf-manifest-reference.yml as template for your CF CLI manifest file.
 
 ```
 $ mvn package
 $ cf push sanbox-ui -p target/elpaaso-service-1.0-SNAPSHOT.jar -m manifest.yml
 ```
+
+Or inherit cf-manifest-reference.yml and customize
+
+```
+`---
+inherrit: cf-manifest-reference.yml
+applications:
+- name: my-sandbox-ui
+  domains:
+   - cf.rocks.org
+   - cf.rocks.com
+  env:
+    CLOUDFOUNDRY_API_URL: https://my-cloud-foundry.org
+    CLOUDFOUNDRY_CREDENTIALS_USER_ID: my-sandbox-admin
+    CLOUDFOUNDRY_CREDENTIALS_PASSWORD: <my_sandbox_admin_password>
+    SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE: |
+                -----BEGIN PUBLIC KEY-----
+                ZZZZZIIIIIIGGGGGGGERSFRRRRRRRRRRRRRRRRRRTTTTTTTTTTTT2kOrV1r000Hj
+                2OrOv/HmuMQMDd0tvUNivz+QWA0SaDEhOmj9T7y0000000fg8f/no00rDeBk/ir+
+                3UwpLlw7+AZERTY4FTfp88888888888888888888889999977r2zb1Gkkij0Kd03
+                I2YTREZA6W96CA/u/RTHOTPB
+                -----END PUBLIC KEY-----
+```
+
+## Getting UAA public key to validate JWT signature
+UAA public key is used to decode JWT Token signature.
+The easiest way to get this key, is to ask UAA!
+From [UUA documentation](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-APIs.rst#get-the-token-signing-key-get-token_key),
+it is possible to identify the endpoint **/token_key**
+
+```
+curl https://uaa.<your_domains>/token_key
+
+{
+  "alg": "SHA256withRSA",
+  "value": "-----BEGIN PUBLIC KEY-----\nZZZZZIIIIIIGGGGGGGERSFRRRRRRRRRRRRRRRRRRTTTTTTTTTTTT2kOrV1r000Hj\n2OrOv/HmuMQMDd0tvUNivz+QWA0SaDEhOmj9T7y0000000fg8f/no00rDeBk/ir+\n3UwpLlw7+AZERTY4FTfp88888888888888888888889999977r2zb1Gkkij0Kd03\nI2YTREZA6W96CA/u/RTHOTPB\n-----END PUBLIC KEY-----\n",
+  "kty": "RSA",
+  "use": "sig",
+  "n": "AL5NZWqsdffWl789798751RRTgtytrhfsssdfjjhjuk9Q2K/P5BYfghf799yhfhPvJsPLqChJfrhT+f0xisN4GTsKfghfghuXDv5bMp71T456546987bdfh9eGGTPLUFVqsdfrGlUbvuvfghUaSSKM4p0fcjY4oGNC3pb3oIff79",
+  "e": "AQAB"
+
+}
+```
+**Warning, the value contains multiple \n (remove it, if required)**
+
+
+
+
+
 
 # Running
 ## Pre-requisites
