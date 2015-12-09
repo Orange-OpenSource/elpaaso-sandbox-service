@@ -30,6 +30,8 @@ applications:
 
     # OAuth2
     # You have to customize OAuth2 connection info - Required parameter
+    # Refer to https://github.com/Orange-OpenSource/elpaaso-sandbox-service#getting-uaa-public-key-to-validate-jwt-signature
+    # to get JWT token
     # SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE:
 
     # scope required to allow access to sensitive spring actuator endpoint
