@@ -15,6 +15,9 @@ applications:
     # SHOULD NOT BE disabled in production
     # ENABLE_SSL_CERTIFICATE_CHECK: false
 
+    # Trusted Self-Signed Root CA Certificates to be added to JVM truststore
+    TRUSTSTORE:
+
     # CloudFoundry CC api url (https://api.yourdomain.com)
     CLOUDFOUNDRY_API_URL:
     # CloudFoudry user with Org admin privileges on $CLOUDFOUNDRY_ORG
