@@ -36,3 +36,6 @@ management:
   security:
     enabled: true
   context-path: /manage
+server:
+  session:
+    timeout: 240
