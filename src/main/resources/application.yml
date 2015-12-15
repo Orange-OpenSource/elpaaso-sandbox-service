@@ -16,6 +16,8 @@ cloudfoundry:
   space: default-space
 server:
   port: 8081
+  session:
+      timeout: 240
   tomcat:
     remote_ip_header: x-forwarded-for
     protocol_header: x-forwarded-proto
@@ -36,6 +38,3 @@ management:
   security:
     enabled: true
   context-path: /manage
-server:
-  session:
-    timeout: 240
