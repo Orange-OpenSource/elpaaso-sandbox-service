@@ -88,6 +88,11 @@ Inspirations for API REST
 
 **Note:** If wanna use angularjs (or javascript in general) don't forget to manage CORS on UAA and API
 
+# Dev
+## Maven
+Use [maven wrapper](https://github.com/takari/takari-maven-plugin)
+    mvn -N io.takari:maven:0.3.0:wrapper -Dmaven=3.3.9
+
 # Build
 To be able to build this project, you have to update your maven settings. You can use the one provided [here](/settings.xml)
 
