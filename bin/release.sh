@@ -36,7 +36,7 @@ then
 #	curl --silent -X POST -u ${BINTRAY_USER}:${BINTRAY_PASSWORD} $JFROG_PROMOTION_URL
     git remote -v
     git config --global push.default simple
-    git push
+    git push --set-upstream origin "release-candidate/$RELEASE_NAME"
 	export GITHUB_DATA='{"tag_name":"'$TAG_NAME'","target_commitish":"release-candidate/$RELEASE_NAME","name":"'"$RELEASE_NAME"'","body":"'"$TAG_DESC"'","draft": true,"prerelease": true}'
 	curl --silent -X POST --data "$GITHUB_DATA" https://$GH_TOKEN@api.github.com/repos/Orange-OpenSource/$REPO_NAME/releases
 
