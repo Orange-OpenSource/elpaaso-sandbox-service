@@ -28,6 +28,10 @@ then
 	echo "Extracted Travis repo name: $REPO_NAME"
 
 	JFROG_PROMOTION_URL=http://oss.jfrog.org/api/plugins/build/promote/snapshotsToBintray/$REPO_NAME/${TRAVIS_BUILD_NUMBER}
-	echo "Promotion URL to use: $JFROG_PROMOTION_URL"
-	curl --silent -X POST -u ${BINTRAY_USER}:${BINTRAY_PASSWORD} $JFROG_PROMOTION_URL
+	echo "$JFROG_PROMOTION_URL">JFrogPromotion.url
+	git status
+	git checkout -b "release-candidate/$RELEASE_NAME"
+	git commit -a -m "Update for release-candidate/$RELEASE_NAME"
+#	echo "Promotion URL to use: $JFROG_PROMOTION_URL"
+#	curl --silent -X POST -u ${BINTRAY_USER}:${BINTRAY_PASSWORD} $JFROG_PROMOTION_URL
 fi

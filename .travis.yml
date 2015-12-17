@@ -12,6 +12,12 @@ script:
   - chmod ugo+x bin/*.sh
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && docker run -it -v $(pwd):/root/sources -e BINTRAY_USER -e BINTRAY_PASSWORD -e COVERALLS_TOKEN -e TRAVIS_BRANCH -e TRAVIS_TAG -e TRAVIS_PULL_REQUEST -e TRAVIS_BUILD_NUMBER -e TRAVIS_REPO_SLUG -w /root/sources maven:3.3.3-jdk-8 bin/build.sh || true'
   - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] && docker run -it -v $(pwd):/root/sources -w /root/sources maven:3.3.3-jdk-8 mvn clean verify --settings settings.xml || true'
+branch:
+  except:
+    # ignore branch starting with release-candidate
+    - /^release-candidate.*$/
+after_success:
+  - bin/release.sh
 env:
   global:
   - secure: LPK1h9YNRxumcV1v2OMD22trbO2r6Ka3KDqRdQgOgiD+Boz3oDU6FsCTYIif8OdUmySrbueDOM4/0mNdUO3fOhdypnKZ4b01Y+45EzHwP9KkJmmzRqE0qtHtLv/7yifs7jz1rcRsqBDAJAmcj+TiuuuH/vnufShPoWiezkD4UO5Gt0axKNOFJ0zaqWb7XE9nU8W+l+iIRJtwvvc5YBnYspmIiSsYMAgmB/klIrKJxDNDL6nGFVj9sqwQfOiUA+E8BrdT2WBMUcGjaZcmuCYyOoaFi/ot+g/pQz98X9n046n1WE/IShCM2Y8jCwt3dQmUWFcFPa/H25/Ny9FqmaqhhL7fEEyJVqhPlZazzywcN7HI4+Pizi18qDAvXkuAc8ljFbFEO5VUdWw8k6YBCULRxPAddIdF/M/elnXpsfLL4mOYam3C/d6brSe0DPK4eMbxouCDE5riSaf1K9hocTqBYenkDfdzFKdBRdBI37LhMJh6wKNkUpV8OqRL4gk5UJRmNZHwcVRc77i5B8g9QT3aqm3eQNwqEA6IiE/J+qL5Nca2ozX4t8Zv3xTtmGPAJePybHFmdrRJzxiMtQE5ze1yRsMtXxfbO8KLjHv8572xBrS0k6fDwLvPsjcc/kLOaapYSTMolxLHE2sHk7VEwuFykt8m/eWkmwfQL+LU0Tr3fYo=
