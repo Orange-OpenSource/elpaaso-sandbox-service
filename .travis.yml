@@ -8,6 +8,7 @@ before_install:
   # setup https authentication credentials, used by ./mvnw release:prepare
   - git config credential.helper "store --file=.git/credentials"
   - echo "https://$GH_TOKEN:@github.com" > .git/credentials
+  - git config --global push.default simple
 script:
   - chmod ugo+x bin/*.sh
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && docker run -it -v $(pwd):/root/sources -e BINTRAY_USER -e BINTRAY_PASSWORD -e COVERALLS_TOKEN -e TRAVIS_BRANCH -e TRAVIS_TAG -e TRAVIS_PULL_REQUEST -e TRAVIS_BUILD_NUMBER -e TRAVIS_REPO_SLUG -w /root/sources maven:3.3.3-jdk-8 bin/build.sh || true'

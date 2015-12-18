@@ -32,13 +32,13 @@ then
 	git add JFrogPromotion.url
 	git commit -a -m "Update for release-candidate/$RELEASE_NAME"
 	git status
+#   JFROG_PROMOTION_URL=$(cat JFrogPromotion.url)
 #	echo "Promotion URL to use: $JFROG_PROMOTION_URL"
 #	curl --silent -X POST -u ${BINTRAY_USER}:${BINTRAY_PASSWORD} $JFROG_PROMOTION_URL
-    git remote -v
-    git config --global push.default simple
     git push --set-upstream origin "release-candidate/$RELEASE_NAME"
 	export GITHUB_DATA='{"tag_name":"'$TAG_NAME'","target_commitish":"release-candidate/'$RELEASE_NAME'","name":"'$RELEASE_NAME'","body":"'$TAG_DESC'","draft": true,"prerelease": true}'
 	echo "Github data: $GITHUB_DATA"
+	sleep 10
 	curl --silent -X POST --data "$GITHUB_DATA" https://$GH_TOKEN@api.github.com/repos/Orange-OpenSource/$REPO_NAME/releases
 
 fi
