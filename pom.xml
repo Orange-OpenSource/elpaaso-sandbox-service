@@ -257,9 +257,9 @@
                                         <buildUrl>{{CI_BUILD_URL|BUILD_URL}}</buildUrl>
                                     </buildInfo>
                                     <licenses>
-                                        <autoDiscover>false</autoDiscover>
-                                        <includePublishedArtifacts>false</includePublishedArtifacts>
-                                        <runChecks>false</runChecks>
+                                        <autoDiscover>true</autoDiscover>
+                                        <includePublishedArtifacts>true</includePublishedArtifacts>
+                                        <runChecks>true</runChecks>
                                         <scopes>compile,runtime</scopes>
                                     </licenses>
                                 </configuration>
