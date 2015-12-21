@@ -50,7 +50,7 @@ else
 	mvn install --settings settings.xml
 fi
 
-if [[ "${TAG_NAME}" = releases/* ]]
+if [[ "${TRAVIS_TAG}" = releases/* ]]
 then
     JFROG_PROMOTION_URL=$(cat JFrogPromotion.url)
     echo "Promoting build on JFrog to Bintray (Promotion URL: $JFROG_PROMOTION_URL)"
