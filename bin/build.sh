@@ -50,4 +50,11 @@ else
 	mvn install --settings settings.xml
 fi
 
+if [[ "${TAG_NAME}" = releases/* ]]
+then
+    JFROG_PROMOTION_URL=$(cat JFrogPromotion.url)
+    echo "Promoting build on JFrog to Bintray (Promotion URL: $JFROG_PROMOTION_URL)"
+    curl --silent -X POST -u ${BINTRAY_USER}:${BINTRAY_PASSWORD} $JFROG_PROMOTION_URL
+fi
+
 
