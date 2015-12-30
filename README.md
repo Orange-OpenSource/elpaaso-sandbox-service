@@ -44,16 +44,14 @@ Pending stories:
 ## Tech specs of the sandbox service
 
 ### Overview
+Authentication process is done by Sandbox UI ([details](https://github.com/Orange-OpenSource/elpaaso-sandbox-ui/#overview-1))
 
 ![Sandbox service](http://g.gravizo.com/g?
-@startuml
-User -> SandboxService: GET sandboxes/me;
-User <-- SandboxService: 302 location=uaa/login;
-User -> uaa: ....;
-User <-- uaa: 302: GET: SandboxService/sandboxes/me?code=rezrze;
-User -> SandboxService : GET /sandboxes/me?code=rezrze;
-SandboxService -> uaa : GET /oauth/token?code=rezrze;
-SandboxService <-- uaa : user_token;
+@startuml;
+User -> SandboxUi: GET sandboxes/me;
+SandboxUi <-> Uaa: oauth2 authentication process;
+SandboxUi -> SandboxService: GET sandboxes/me;
+SandboxService -> SandboxService : validate Oauth2 Token;
 SandboxService -> CC_api: login (as user);
 SandboxService -> CC_api: getCloudInfo (as user);
 SandboxService -> CC_api: getOrg (as Admin);
@@ -62,7 +60,8 @@ SandboxService -> CC_api: CreateSpace (as Admin);
 SandboxService -> CC_api: AssignManagerRole("org_name","space_name","user_id") (as Admin);
 SandboxService -> CC_api: AssignAuditorRole("org_name","space_name","user_id") (as Admin);
 SandboxService -> CC_api: AssignDeveloperRole("org_name","space_name","user_id") (as Admin);
-User <-- SandboxService: "org_name","space_name","cc_api_url";
+SandboxUi <-- SandboxService: "org_name","space_name","cc_api_url";
+User <-- SandboxUi: "org_name","space_name","cc_api_url";
 @enduml)
 
 
@@ -73,7 +72,6 @@ User <-- SandboxService: "org_name","space_name","cc_api_url";
 
   *  OAuth client (CF resources)
     *  scope: scim... cloudcountrol...
-
 
 * sandboxes/me GET (Bearer: AccessToken)
     *  301 sandbox/guid
@@ -94,6 +92,7 @@ Inspirations for API REST
 # Dev
 ## Maven
 Use [maven wrapper](https://github.com/takari/takari-maven-plugin)
+
     mvn -N io.takari:maven:0.3.0:wrapper -Dmaven=3.3.9
 
 # Build
