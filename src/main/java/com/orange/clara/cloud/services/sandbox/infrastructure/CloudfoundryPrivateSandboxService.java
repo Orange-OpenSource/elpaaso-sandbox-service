@@ -17,12 +17,19 @@ import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
 import com.orange.clara.cloud.services.sandbox.domain.PrivateSandboxService;
 import com.orange.clara.cloud.services.sandbox.domain.SandboxInfo;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.client.v2.organizations.AssociateOrganizationUserByUsernameRequest;
+import org.cloudfoundry.client.v2.organizations.ListOrganizationsRequest;
+import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
+import org.cloudfoundry.client.v2.spaces.CreateSpaceRequest;
+import org.cloudfoundry.client.v2.spaces.CreateSpaceResponse;
+import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import reactor.rx.Streams;
 
 /**
  * Created by sbortolussi on 02/10/2015.
@@ -43,15 +50,33 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
 
     @Override
     public SandboxInfo createSandboxForUser(UserInfo userInfo) {
-        SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(),userInfo.getUsername(), cloudfoundryTarget.getApiUrl());
-        LOGGER.info("Associates user {} with org {}",userInfo.getUsername(),sandboxInfo.getOrgName());
-        cloudFoundryClient.associateUserWithOrg(cloudfoundryTarget.getOrg(), userInfo.getUsername());
-        LOGGER.info("Creates space {} for user {}",sandboxInfo.getSpaceName(),userInfo.getUsername());
-        cloudFoundryClient.createSpace(sandboxInfo.getSpaceName());
-        LOGGER.info("Associates user {} (auditor, manager and developer)with space {}",userInfo.getUsername(),sandboxInfo.getSpaceName());
-        cloudFoundryClient.associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
-        cloudFoundryClient.associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
-        cloudFoundryClient.associateDeveloperWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
+        SandboxInfo sandboxInfo = new SandboxInfo(cloudfoundryTarget.getOrg(), userInfo.getUsername(), cloudfoundryTarget.getApiUrl());
+        LOGGER.info("Associates user {} with org {}", userInfo.getUsername(), sandboxInfo.getOrgName());
+        String orgGuid = getTargetedOrganizationGuid();
+
+
+        AssociateOrganizationUserByUsernameRequest associateOrganizationUserByUsernameRequest = AssociateOrganizationUserByUsernameRequest.builder().id(orgGuid).username(userInfo.getUsername()).build();
+        cloudFoundryClient.organizations().associateUserByUsername(associateOrganizationUserByUsernameRequest);
+        LOGGER.info("Creates space {} for user {} (id: {}), also adds auditor, manager and developer rights", new Object[]{sandboxInfo.getSpaceName(), userInfo.getUsername(),userInfo.getUserId()});
+
+        CreateSpaceRequest sandboxUserSpaceCreationRequest = CreateSpaceRequest.builder()
+                .organizationId(orgGuid)
+                .name(sandboxInfo.getSpaceName())
+                .managerId(userInfo.getUserId())
+                .auditorId(userInfo.getUserId())
+                .developerId(userInfo.getUserId())
+                .build();
+        Publisher<CreateSpaceResponse> sandboxUserSpaceCreationResponse = cloudFoundryClient.spaces().create(sandboxUserSpaceCreationRequest);
+        Streams.wrap(sandboxUserSpaceCreationResponse).next().get().getMetadata().getId();
         return sandboxInfo;
     }
+
+    private String getTargetedOrganizationGuid() {
+        ListOrganizationsRequest organizationsRequest = ListOrganizationsRequest.builder().name(cloudfoundryTarget.getOrg()).build();
+        Publisher<ListOrganizationsResponse> sandboxOrgPublisher = cloudFoundryClient.organizations().list(organizationsRequest);
+        ListOrganizationsResponse organizationsResponse = Streams.wrap(sandboxOrgPublisher).next().get();
+        ListOrganizationsResponse.Resource orgResource = organizationsResponse.getResources().stream().findFirst().get();
+        return orgResource.getMetadata().getId();
+    }
+
 }

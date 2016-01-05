@@ -14,8 +14,8 @@
 package com.orange.clara.cloud.services.sandbox;
 
 import com.orange.clara.cloud.services.sandbox.config.CloudfoundryTarget;
-import org.cloudfoundry.client.lib.CloudCredentials;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.client.spring.SpringCloudFoundryClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +55,21 @@ public class ElpaasoSandboxServiceApplication {
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public CloudFoundryClient getCloudFoundryClientAsUser() {
         LOGGER.debug("Creating new CloudFoundry client using access token");
-        CloudCredentials credentials = new CloudCredentials(getOAuth2AccessToken(), false);
-        return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.isTrustSelfSignedCerts());
+//        CloudCredentials credentials = new CloudCloudCredentials(getOAuth2AccessToken(), false);
+//        return new SpringCloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.isTrustSelfSignedCerts());
+            throw new RuntimeException("Not Yet Implemented - not possible to create a CloudFoundryClient from an Oauth2 token");
     }
 
     @Bean(name = "cloudFoundryClientAsAdmin")
     public CloudFoundryClient getCloudFoundryClientAsAdmin() {
         LOGGER.debug("Creating new ADMIN CloudFoundry client ");
-        CloudCredentials credentials = new CloudCredentials(cloudfoundryTarget.getCredentials().getUserId(), cloudfoundryTarget.getCredentials().getPassword());
-        return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.getOrg(), cloudfoundryTarget.getSpace(), cloudfoundryTarget.isTrustSelfSignedCerts());
+        String cfUsername=cloudfoundryTarget.getCredentials().getUserId();
+        String cfPassword= cloudfoundryTarget.getCredentials().getPassword();
+        return SpringCloudFoundryClient.builder()
+                .host(cloudfoundryTarget.getApiUrl().getHost())
+                .username(cfUsername)
+                .password(cfPassword)
+                .skipSslValidation(cloudfoundryTarget.isTrustSelfSignedCerts())
+                .build();
     }
 }

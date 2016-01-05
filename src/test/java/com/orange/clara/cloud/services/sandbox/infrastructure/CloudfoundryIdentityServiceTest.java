@@ -14,26 +14,31 @@
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.cloudfoundry.client.lib.domain.CloudInfo;
+import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.client.spring.v2.info.SpringInfo;
+import org.cloudfoundry.client.v2.info.GetInfoRequest;
+import org.cloudfoundry.client.v2.info.GetInfoResponse;
+import org.cloudfoundry.client.v2.info.Info;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import reactor.rx.Stream;
+import reactor.rx.Streams;
 
 import java.security.Principal;
-import java.util.AbstractMap;
 import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
 
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -48,9 +53,6 @@ public class CloudfoundryIdentityServiceTest {
     CloudFoundryClient cloudFoundryClient;
 
     @Mock
-    OAuth2ClientContext oauth2Context;
-
-    @Mock
     OAuth2AccessToken oAuth2AccessToken;
 
     @InjectMocks
@@ -58,6 +60,9 @@ public class CloudfoundryIdentityServiceTest {
 
     @Test
     public void should_get_user_id() throws Exception {
+        Info info = mock(Info.class);
+        when(info.get(isA(GetInfoRequest.class))).thenReturn(Streams.from(Collections.singletonList(getInfoResponseMock())));
+        when(cloudFoundryClient.info()).thenReturn(info);
         when(oAuth2AccessToken.getValue()).thenReturn(ACCESS_TOKEN);
         identityService.setoAuth2AccessToken(oAuth2AccessToken);
 
@@ -67,5 +72,22 @@ public class CloudfoundryIdentityServiceTest {
         Assertions.assertThat(userInfo).isEqualTo(new UserInfo("myUsername", "uaa-id-314"));
     }
 
+
+    GetInfoResponse getInfoResponseMock() {
+        return GetInfoResponse.builder()
+                .name("vcap")
+                .buildNumber("2222")
+                .support("http://support.cloudfoundry.com")
+                .version(2)
+                .description("Cloud Foundry sponsored by Pivotal")
+                .authorizationEndpoint("http://localhost:8080/uaa")
+                .tokenEndpoint("http://localhost:8080/uaa")
+                .apiVersion("2.44.0")
+                .applicationSshEndpoint("ssh.system.domain.example.com:2222")
+                .applicationSshHostKeyFingerprint("47:0d:d1:c8:c3:3d:0a:36:d1:49:2f:f2:90:27:31:d0")
+                .routingEndpoint("http://localhost:3000")
+                .loggingEndpoint("ws://loggregator.vcap.me:80")
+                .build();
+    }
 
 }

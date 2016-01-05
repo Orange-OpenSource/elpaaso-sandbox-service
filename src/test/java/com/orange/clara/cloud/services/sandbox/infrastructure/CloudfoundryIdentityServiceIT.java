@@ -13,8 +13,7 @@
 
 package com.orange.clara.cloud.services.sandbox.infrastructure;
 
-import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.cloudfoundry.client.lib.domain.CloudInfo;
+import org.cloudfoundry.client.CloudFoundryClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

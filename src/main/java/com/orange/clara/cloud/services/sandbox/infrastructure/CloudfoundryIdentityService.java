@@ -16,7 +16,8 @@ package com.orange.clara.cloud.services.sandbox.infrastructure;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.clara.cloud.services.sandbox.domain.IdentityService;
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.CloudFoundryClient;
+import org.cloudfoundry.client.v2.info.GetInfoRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,6 @@ public class CloudfoundryIdentityService implements IdentityService {
     }
 
     private void createUserInCloudfoundry() {
-        cloudFoundryClient.getCloudInfo();
+        cloudFoundryClient.info().get(GetInfoRequest.builder().build());
     }
 }

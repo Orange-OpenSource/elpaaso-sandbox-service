@@ -35,6 +35,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <spring-boot-ssl-truststore-gen.version>2.0.21</spring-boot-ssl-truststore-gen.version>
+        <reactive-streams.version>1.0.0</reactive-streams.version>
+        <reactor.version>2.5.0.BUILD-SNAPSHOT</reactor.version>
+        <cloudfoundry-client.version>6c03085</cloudfoundry-client.version>
     </properties>
 
     <distributionManagement>
@@ -46,6 +49,12 @@
     </distributionManagement>
 
     <inceptionYear>2015</inceptionYear>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -60,6 +69,16 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.cloudfoundry.cf-java-client</groupId>
+            <artifactId>cloudfoundry-client-spring</artifactId>
+            <version>${cloudfoundry-client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.cloudfoundry.cf-java-client</groupId>
+            <artifactId>cloudfoundry-operations</artifactId>
+            <version>${cloudfoundry-client.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -94,11 +113,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.orange.clara.cloudfoundry.client.lib</groupId>
-            <artifactId>cloudfoundry-client-lib</artifactId>
-            <version>1.1.4.ORANGEv19</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.orange.clara.cloudfoundry.client.lib</groupId>-->
+            <!--<artifactId>cloudfoundry-client-lib</artifactId>-->
+            <!--<version>1.1.4.ORANGEv19</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
@@ -130,6 +149,11 @@
             <groupId>com.orange.clara.cloud.boot.ssl-truststore-gen</groupId>
             <artifactId>spring-boot-ssl-truststore-gen</artifactId>
             <version>${spring-boot-ssl-truststore-gen.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.6</version>
         </dependency>
     </dependencies>
 
