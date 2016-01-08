@@ -24,12 +24,9 @@ import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.reactivestreams.Publisher;
-import reactor.rx.Streams;
+import reactor.Mono;
 
 import java.net.URL;
 import java.util.Collections;
@@ -80,15 +77,15 @@ public class CloudfoundryPrivateSandboxServiceTest {
         Assertions.assertThat(sandboxForUser).isEqualTo(new SandboxInfo(orgName, userName, apiUrl));
     }
 
-    private Publisher<ListOrganizationsResponse> x() {
-        return Streams.from(Collections.singletonList(getOrgResponseMock("orange")));
+    private Mono<ListOrganizationsResponse> x() {
+        return Mono.just(getOrgResponseMock("orange"));
     }
 
     private ListOrganizationsResponse getOrgResponseMock(String orgName) {
         return ListOrganizationsResponse.builder()
                 .totalResults(1)
                 .totalPages(1)
-                .resource(ListOrganizationsResponse.Resource.builder()
+                .resource(OrganizationResource.builder()
                         .metadata(Resource.Metadata.builder()
                                 .id("deb3c359-2261-45ba-b34f-ee7487acd71a")
                                 .url("/v2/organizations/deb3c359-2261-45ba-b34f-ee7487acd71a")
@@ -115,8 +112,8 @@ public class CloudfoundryPrivateSandboxServiceTest {
     }
 
 
-    Publisher<CreateSpaceResponse> getCreateSpaceResponseMock(CreateSpaceRequest createSpaceRequest) {
-        return Streams.from(Collections.singletonList(
+    Mono<CreateSpaceResponse> getCreateSpaceResponseMock(CreateSpaceRequest createSpaceRequest) {
+        return Mono.just(
                 CreateSpaceResponse.builder()
                         .metadata(Resource.Metadata.builder()
                                 .id("d29dc30c-793c-49a6-97fe-9aff75dcbd12")
@@ -139,6 +136,6 @@ public class CloudfoundryPrivateSandboxServiceTest {
                                 .eventsUrl("/v2/spaces/d29dc30c-793c-49a6-97fe-9aff75dcbd12/events")
                                 .securityGroupsUrl("/v2/spaces/d29dc30c-793c-49a6-97fe-9aff75dcbd12/security_groups")
                                 .build())
-                        .build()));
+                        .build());
     }
 }

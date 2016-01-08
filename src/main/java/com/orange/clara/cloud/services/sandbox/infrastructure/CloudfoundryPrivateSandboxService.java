@@ -24,14 +24,12 @@ import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
 import org.cloudfoundry.client.v2.organizations.OrganizationResource;
 import org.cloudfoundry.client.v2.spaces.CreateSpaceRequest;
 import org.cloudfoundry.client.v2.spaces.CreateSpaceResponse;
-import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import reactor.Mono;
-import reactor.rx.Streams;
 
 /**
  * Created by sbortolussi on 02/10/2015.
@@ -59,7 +57,7 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
 
         AssociateOrganizationUserByUsernameRequest associateOrganizationUserByUsernameRequest = AssociateOrganizationUserByUsernameRequest.builder().id(orgGuid).username(userInfo.getUsername()).build();
         cloudFoundryClient.organizations().associateUserByUsername(associateOrganizationUserByUsernameRequest);
-        LOGGER.info("Creates space {} for user {} (id: {}), also adds auditor, manager and developer rights", new Object[]{sandboxInfo.getSpaceName(), userInfo.getUsername(),userInfo.getUserId()});
+        LOGGER.info("Creates space {} for user {} (id: {}), also adds auditor, manager and developer rights", new Object[]{sandboxInfo.getSpaceName(), userInfo.getUsername(), userInfo.getUserId()});
 
         CreateSpaceRequest sandboxUserSpaceCreationRequest = CreateSpaceRequest.builder()
                 .organizationId(orgGuid)

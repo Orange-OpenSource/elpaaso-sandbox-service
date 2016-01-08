@@ -15,7 +15,6 @@ package com.orange.clara.cloud.services.sandbox.infrastructure;
 
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.CloudFoundryClient;
-import org.cloudfoundry.client.spring.v2.info.SpringInfo;
 import org.cloudfoundry.client.v2.info.GetInfoRequest;
 import org.cloudfoundry.client.v2.info.GetInfoResponse;
 import org.cloudfoundry.client.v2.info.Info;
@@ -25,17 +24,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import reactor.rx.Stream;
-import reactor.rx.Streams;
+import reactor.Mono;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
 
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
@@ -61,7 +53,7 @@ public class CloudfoundryIdentityServiceTest {
     @Test
     public void should_get_user_id() throws Exception {
         Info info = mock(Info.class);
-        when(info.get(isA(GetInfoRequest.class))).thenReturn(Streams.from(Collections.singletonList(getInfoResponseMock())));
+        when(info.get(isA(GetInfoRequest.class))).thenReturn(Mono.just(getInfoResponseMock()));
         when(cloudFoundryClient.info()).thenReturn(info);
         when(oAuth2AccessToken.getValue()).thenReturn(ACCESS_TOKEN);
         identityService.setoAuth2AccessToken(oAuth2AccessToken);

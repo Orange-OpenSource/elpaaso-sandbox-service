@@ -19,6 +19,7 @@ import org.cloudfoundry.client.CloudFoundryClient;
 import org.cloudfoundry.client.spring.SpringCloudFoundryClient;
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsRequest;
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
+import org.cloudfoundry.client.v2.organizations.OrganizationResource;
 import org.cloudfoundry.client.v2.organizations.Organizations;
 import org.cloudfoundry.operations.v2.Paginated;
 import org.cloudfoundry.operations.v2.Resources;
@@ -34,6 +35,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Component;
+import reactor.Mono;
 import reactor.rx.Promise;
 import reactor.rx.Streams;
 import reactor.rx.broadcast.Broadcaster;
@@ -41,6 +43,7 @@ import reactor.rx.subscriber.Control;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -107,13 +110,13 @@ public class CfClientV2IT {
             ListOrganizationsRequest request = ListOrganizationsRequest.builder().build();
             Publisher<ListOrganizationsResponse> publisher = this.cloudFoundryClient.organizations().list(request);
 
-            ListOrganizationsResponse organizationsResponse = Streams.wrap(publisher).next().get();
+            ListOrganizationsResponse organizationsResponse = Mono.from(publisher).get();
             organizationsResponse.getResources().stream().forEachOrdered(resource -> {
                 log.info("Stream - Org: {} - Id: {}", resource.getEntity().getName(), resource.getMetadata().getId());
             });
 
 
-            for (ListOrganizationsResponse.Resource orgResource : organizationsResponse.getResources()) {
+            for (OrganizationResource orgResource : organizationsResponse.getResources()) {
                 log.info("Foreach - Org: {} - Id: {}", orgResource.getEntity().getName(), orgResource.getMetadata().getId());
             }
 
