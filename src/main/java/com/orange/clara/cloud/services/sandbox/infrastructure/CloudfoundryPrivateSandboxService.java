@@ -21,6 +21,7 @@ import org.cloudfoundry.client.CloudFoundryClient;
 import org.cloudfoundry.client.v2.organizations.AssociateOrganizationUserByUsernameRequest;
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsRequest;
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
+import org.cloudfoundry.client.v2.organizations.OrganizationResource;
 import org.cloudfoundry.client.v2.spaces.CreateSpaceRequest;
 import org.cloudfoundry.client.v2.spaces.CreateSpaceResponse;
 import org.reactivestreams.Publisher;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import reactor.Mono;
 import reactor.rx.Streams;
 
 /**
@@ -66,16 +68,16 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
                 .auditorId(userInfo.getUserId())
                 .developerId(userInfo.getUserId())
                 .build();
-        Publisher<CreateSpaceResponse> sandboxUserSpaceCreationResponse = cloudFoundryClient.spaces().create(sandboxUserSpaceCreationRequest);
-        Streams.wrap(sandboxUserSpaceCreationResponse).next().get().getMetadata().getId();
+        Mono<CreateSpaceResponse> sandboxUserSpaceCreationResponse = cloudFoundryClient.spaces().create(sandboxUserSpaceCreationRequest);
+        Mono.from(sandboxUserSpaceCreationResponse).get().getMetadata().getId();
         return sandboxInfo;
     }
 
     private String getTargetedOrganizationGuid() {
         ListOrganizationsRequest organizationsRequest = ListOrganizationsRequest.builder().name(cloudfoundryTarget.getOrg()).build();
-        Publisher<ListOrganizationsResponse> sandboxOrgPublisher = cloudFoundryClient.organizations().list(organizationsRequest);
-        ListOrganizationsResponse organizationsResponse = Streams.wrap(sandboxOrgPublisher).next().get();
-        ListOrganizationsResponse.Resource orgResource = organizationsResponse.getResources().stream().findFirst().get();
+        Mono<ListOrganizationsResponse> sandboxOrgPublisher = cloudFoundryClient.organizations().list(organizationsRequest);
+        ListOrganizationsResponse organizationsResponse = Mono.from(sandboxOrgPublisher).get();
+        OrganizationResource orgResource = organizationsResponse.getResources().stream().findFirst().get();
         return orgResource.getMetadata().getId();
     }
 

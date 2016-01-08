@@ -37,7 +37,7 @@
         <spring-boot-ssl-truststore-gen.version>2.0.21</spring-boot-ssl-truststore-gen.version>
         <reactive-streams.version>1.0.0</reactive-streams.version>
         <reactor.version>2.5.0.BUILD-SNAPSHOT</reactor.version>
-        <cloudfoundry-client.version>6c03085</cloudfoundry-client.version>
+        <cloudfoundry-client.version>8fabada</cloudfoundry-client.version>
         <lombok.version>1.16.6</lombok.version>
         <jose4j.version>0.4.4</jose4j.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
