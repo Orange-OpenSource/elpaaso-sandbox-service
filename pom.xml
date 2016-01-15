@@ -178,7 +178,7 @@
                             <exclude>**/.mvn/**</exclude>
                             <exclude>mvnw**</exclude>
                             <exclude>**/**.puml</exclude>
-                            <exclude>sandbox-service_manifest.yml</exclude>
+                            <exclude>sandbox-service_manifest*.yml</exclude>
                         </excludes>
                         <useDefaultExcludes>true</useDefaultExcludes>
                     </configuration>
