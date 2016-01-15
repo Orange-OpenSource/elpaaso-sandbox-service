@@ -48,7 +48,7 @@ public class CloudfoundryPrivateSandboxService implements PrivateSandboxService 
         cloudFoundryClient.associateUserWithOrg(cloudfoundryTarget.getOrg(), userInfo.getUsername());
         LOGGER.info("Creates space {} for user {}",sandboxInfo.getSpaceName(),userInfo.getUsername());
         cloudFoundryClient.createSpace(sandboxInfo.getSpaceName());
-        LOGGER.info("Associates user {} (auditor, manager and developer)with space {}",userInfo.getUsername(),sandboxInfo.getSpaceName());
+        LOGGER.info("Associates user {} (auditor, manager and developer) with space {}",userInfo.getUsername(),sandboxInfo.getSpaceName());
         cloudFoundryClient.associateAuditorWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
         cloudFoundryClient.associateManagerWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
         cloudFoundryClient.associateDeveloperWithSpace(sandboxInfo.getOrgName(), sandboxInfo.getSpaceName(), userInfo.getUserId());
