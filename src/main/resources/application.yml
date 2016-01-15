@@ -43,10 +43,7 @@ security:
     admin.scope: ${SECURITY_OAUTH2_ADMIN_SCOPE:cloud_controller.admin}
     resource:
        jwt:
-          keyValue: ${SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE:no_key_defined}
-endpoints:
-  actuator:
-    sensitive: true
+          key-uri: ${LOGIN_URL:http://localhost}/token_key
 management:
   security:
     enabled: true
