@@ -43,8 +43,8 @@
 
         <!-- test dependencies -->
         <jose4j.version>0.4.4</jose4j.version>
-        <fest-assert.version>1.4</fest-assert.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <assertj-core.version>3.3.0</assertj-core.version>
     </properties>
 
     <distributionManagement>
@@ -81,6 +81,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -128,9 +129,9 @@
             <version>${protobuf-java.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
-            <version>${fest-assert.version}</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

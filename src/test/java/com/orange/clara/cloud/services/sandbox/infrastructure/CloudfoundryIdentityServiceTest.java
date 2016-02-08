@@ -15,25 +15,17 @@ package com.orange.clara.cloud.services.sandbox.infrastructure;
 
 import com.orange.clara.cloud.services.sandbox.domain.UserInfo;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.cloudfoundry.client.lib.domain.CloudInfo;
-import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.security.Principal;
-import java.util.AbstractMap;
-import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
@@ -64,7 +56,7 @@ public class CloudfoundryIdentityServiceTest {
         Principal user = () -> "myUsername";
 
         UserInfo userInfo = identityService.getInfo(user);
-        Assertions.assertThat(userInfo).isEqualTo(new UserInfo("myUsername", "uaa-id-314"));
+        assertThat(userInfo).isEqualTo(new UserInfo("myUsername", "uaa-id-314"));
     }
 
 
