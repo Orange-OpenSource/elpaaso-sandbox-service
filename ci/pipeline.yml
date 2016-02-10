@@ -1,0 +1,28 @@
+---
+resources:
+- name: elpaaso-sandbox-service
+  type: git
+  source:
+    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-service
+jobs:
+- name: jobs-elpaaso-sandbox-service
+  public: true
+  plan:
+  - get: elpaaso-sandbox-service
+  - task: compile
+    config:
+      platform: linux
+#      image: docker:///busybox
+#      run:
+#        path: echo
+#        args: [hello world! Time to go...]
+      image: docker:///maven#3.3.3-jdk-8
+      inputs:
+       - name: elpaaso-sandbox-service
+      run:
+        path: mvn
+        #elpaaso-sandbox-service/ci/unit-test.sh
+        args: [-f elpaaso-sandbox-service/ -e install -s settings.xml]
+#        args: [--version]
+      params:
+        HOME: /tmp
