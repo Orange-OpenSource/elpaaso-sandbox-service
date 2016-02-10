@@ -1,0 +1,15 @@
+---
+platform: linux
+image: docker:///java#8-jdk
+#image: docker:///maven#3.3.3-jdk-8
+
+inputs:
+ - name: elpaaso-sandbox-service
+
+run:
+#  path: mvn
+  path: elpaaso-sandbox-service/ci/unit-test.sh
+#  args: [-f elpaaso-sandbox-service/ -e pacakge -s settings.xml]
+#        args: [--version]
+#params:
+#  HOME: /tmp
