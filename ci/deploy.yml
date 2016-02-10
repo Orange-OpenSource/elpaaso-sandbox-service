@@ -1,0 +1,13 @@
+---
+platform: linux
+image: docker:///java#8-jdk
+
+inputs:
+- name: elpaaso-sandbox-service
+
+run:
+  path: elpaaso-sandbox-service/ci/deploy.sh
+
+params:
+  BINTRAY_USER:
+  BINTRAY_PASSWORD:
