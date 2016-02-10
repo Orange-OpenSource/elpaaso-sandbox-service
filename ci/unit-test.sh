@@ -3,5 +3,5 @@
 set -e
 
 pushd elpaaso-sandbox-service
-  ./mvnw package -e settings.xml
+  ./mvnw package -e -s settings.xml
 popd
