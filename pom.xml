@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.orange.elpaaso.maven</groupId>
         <artifactId>elpaaso-starter-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.1-SNAPSHOT</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -36,15 +36,14 @@
         <java.version>1.8</java.version>
 
         <!-- dependencies -->
-        <spring-boot-ssl-truststore-gen.version>2.0.21</spring-boot-ssl-truststore-gen.version>
         <cloudfoundry-client.version>1.1.4.ORANGEv19</cloudfoundry-client.version>
-        <commons-lang3.version>3.3.2</commons-lang3.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
         <protobuf-java.version>2.6.1</protobuf-java.version>
 
         <!-- test dependencies -->
-        <jose4j.version>0.4.4</jose4j.version>
+        <jose4j.version>0.5.1</jose4j.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <assertj-core.version>3.3.0</assertj-core.version>
+        <assertj-core.version>3.4.1</assertj-core.version>
     </properties>
 
     <distributionManagement>
@@ -62,7 +61,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-parent</artifactId>
-                <version>Brixton.M1</version>
+                <version>Brixton.SR1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -70,6 +69,14 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
@@ -150,11 +157,6 @@
             <version>${jose4j.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.orange.clara.cloud.boot.ssl-truststore-gen</groupId>
-            <artifactId>spring-boot-ssl-truststore-gen</artifactId>
-            <version>${spring-boot-ssl-truststore-gen.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -163,7 +165,6 @@
                 <plugin>
                     <groupId>com.mycila</groupId>
                     <artifactId>license-maven-plugin</artifactId>
-                    <version>2.11</version>
                     <configuration>
                         <header>
                             https://raw.githubusercontent.com/Orange-OpenSource/elpaaso/master/src/license/apache-2-custom-header.txt
@@ -194,7 +195,6 @@
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.0.0</version>
                 <configuration>
                     <repoToken>${env.COVERALLS_TOKEN}</repoToken>
                 </configuration>
@@ -202,7 +202,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.5.201505241946</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
