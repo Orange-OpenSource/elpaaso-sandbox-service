@@ -21,7 +21,7 @@
 
     <groupId>com.orange.clara.cloud.services.sandbox</groupId>
     <artifactId>elpaaso-sandbox-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.98-SNAPSHOT</version>
 
     <parent>
         <groupId>com.orange.elpaaso.maven</groupId>
