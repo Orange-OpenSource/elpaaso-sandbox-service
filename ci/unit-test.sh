@@ -17,5 +17,5 @@ OUTPUT_DIR=$(pwd)/build-out
 
 pushd project-path
   ./mvnw verify -e -s settings.xml
-  cp target/*.jar $OUTPUT_DIR
+  cp target/*.jar $OUTPUT_DIR/application.jar
 popd
