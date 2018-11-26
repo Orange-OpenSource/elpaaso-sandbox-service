@@ -47,6 +47,10 @@ Pending stories:
 ### Overview
 Authentication process is done by Sandbox UI ([details](https://github.com/Orange-OpenSource/elpaaso-sandbox-ui/#overview-1))
 
+![sandbox service sequence diagram](http://www.plantuml.com/plantuml/svg/jPDDIyD048Rl_HL3JYrO18-jI4iKyI05s-0nZBjZEhYP2VjHn5zlOlmeL4j4l0IMlCypEyFi8aJqCTLkFYe2UPXUm1h5FkXpmJEuljf0w8yKJckQZpv_mdaRBH1de9ZYzWowBqbaWv5LeF5gA8Hzuikz9hzZGqSAl2SE6PZ13XrRZ0Ihll96dqY-8_EynAPjmsd50cCCa0BvoR5eHJ5tckoDFEfWOkMhj-pIrYn7myiGr316wePzpt7ReYZyqizic2Ftr0hM3HeQNfKhkKN1YloTEXfdwgjIiARi90kTwUFGjLkopIQ_KY-JvQZ_ehwa7Jbj_dBlVbkd1ylteyoOxWPbyYxhdyK-Nl1GSa5YK-rU0G00)
+
+<!--
+
 ![Sandbox service](http://g.gravizo.com/g?
 @startuml;
 User -> SandboxUi: GET sandboxes/me;
@@ -65,7 +69,7 @@ SandboxUi <-- SandboxService: "org_name","space_name","cc_api_url";
 User <-- SandboxUi: "org_name","space_name","cc_api_url";
 @enduml)
 
-
+-->
 
 * sandbox oauth roles 
   *  OAuth resource server (/sandbox)
