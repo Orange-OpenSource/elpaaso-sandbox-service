@@ -63,6 +63,6 @@ public class ElpaasoSandboxServiceApplication {
     public CloudFoundryClient getCloudFoundryClientAsAdmin() {
         LOGGER.debug("Creating new ADMIN CloudFoundry client ");
         CloudCredentials credentials = new CloudCredentials(cloudfoundryTarget.getCredentials().getUserId(), cloudfoundryTarget.getCredentials().getPassword());
-        return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.isTrustSelfSignedCerts());
+        return new CloudFoundryClient(credentials, cloudfoundryTarget.getApiUrl(), cloudfoundryTarget.getOrg(), cloudfoundryTarget.getSpace(), cloudfoundryTarget.isTrustSelfSignedCerts());
     }
 }
